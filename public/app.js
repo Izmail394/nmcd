@@ -100,8 +100,6 @@ async function loadSources() {
 async function loadHealth() {
   try {
     const health = await api('/api/health');
-    const parts = [`v${health.version}`, health.mode === 'replay' ? 'воспроизведение снимков' : 'живые источники'];
-    $('health').textContent = parts.join(' · ');
     if (health.mode === 'replay') {
       const day = health.snapshotDate ? new Date(health.snapshotDate).toLocaleDateString('ru-RU') : '';
       $('demo-note').hidden = false;
@@ -111,7 +109,7 @@ async function loadHealth() {
         'Полная версия с поиском в реальном времени запускается из репозитория.';
     }
   } catch {
-    /* бейдж остаётся по умолчанию */
+    /* плашка демо-режима просто не показывается */
   }
 }
 

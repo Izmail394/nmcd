@@ -28,7 +28,14 @@ const EXAMPLES = [
 fs.rmSync(snapshotDir, { recursive: true, force: true });
 const server = spawn(process.execPath, ['src/server.js'], {
   cwd: root,
-  env: { ...process.env, SNAPSHOT_MODE: 'record', SNAPSHOT_DIR: snapshotDir, PORT: String(port), HOST: '127.0.0.1', DATA_DIR: path.join(root, 'data', 'record-tmp') },
+  env: {
+    ...process.env,
+    SNAPSHOT_MODE: 'record',
+    SNAPSHOT_DIR: snapshotDir,
+    PORT: String(port),
+    HOST: '127.0.0.1',
+    DATA_DIR: path.join(root, 'data', 'record-tmp'),
+  },
   stdio: ['ignore', 'ignore', 'inherit'],
 });
 
@@ -47,7 +54,11 @@ async function waitForServer() {
 try {
   await waitForServer();
   for (const body of EXAMPLES) {
-    const response = await fetch(`http://127.0.0.1:${port}/api/calculate`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const response = await fetch(`http://127.0.0.1:${port}/api/calculate`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    });
     const report = await response.json();
     if (!response.ok) throw new Error(report.error ?? `HTTP ${response.status}`);
     const { calculation, sources } = report;
