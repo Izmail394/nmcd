@@ -1,0 +1,13 @@
+# Демо-режим на бесплатном хостинге Render: сервис работает по сохраненным ответам источников.
+# Инструкция в docs/DEPLOY_FREE.md.
+services:
+  - type: web
+    name: nmcd-demo
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: SNAPSHOT_MODE
+        value: replay
+      - key: SNAPSHOT_DIR
+        value: /app/demo/snapshots

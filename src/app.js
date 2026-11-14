@@ -30,6 +30,7 @@ export async function buildApp(deps) {
     status: 'ok',
     version: deps.appVersion,
     mode: deps.mode,
+    snapshotDate: deps.snapshotDate ?? null,
     sourcesEnabled: deps.registry.adapters.length,
   }));
 

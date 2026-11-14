@@ -10,6 +10,7 @@ COPY src ./src
 COPY public ./public
 COPY config ./config
 COPY certs ./certs
+COPY demo ./demo
 RUN mkdir -p /app/data && chown -R node:node /app/data
 USER node
 EXPOSE 3000

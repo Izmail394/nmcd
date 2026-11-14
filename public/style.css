@@ -32,3 +32,5 @@ a.secondary{text-decoration:none;display:inline-block}
 .trace ul{margin:4px 0;padding-left:20px}
 .trace li{overflow-wrap:anywhere}
 @media print{.links .link,.filters,.actions,#history-card{display:none!important}.summary{background:#fff!important;color:#000;border:1px solid #999}.summary strong,.summary p,.summary span,.metric b,.metric small{color:#000!important}}
+
+.demo-note{background:#e6f5ed;border:1px solid #bfe2d0;color:#1c5b48;border-radius:12px;padding:14px 18px;margin:0 0 18px;font-size:14px}

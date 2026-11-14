@@ -8,6 +8,7 @@ const EXAMPLES = [
   { label: 'Бумага А4', description: 'Бумага офисная А4, плотность 80 г/м2, пачка 500 листов, белизна не менее 146%', quantity: 200, unit: 'упак', okpd: '17.12.14.110' },
   { label: 'Кабель ВВГнг', description: 'Кабель силовой ВВГнг(А)-LS 3х2,5 мм2, напряжение 0,66 кВ', quantity: 500, unit: 'м', okpd: '27.32.13' },
   { label: 'Картридж', description: 'Картридж для лазерного принтера HP CF283A, ресурс не менее 1500 страниц', quantity: 20, unit: 'шт', okpd: '' },
+  { label: 'Нет данных', description: 'Услуги по разработке мобильного приложения для iOS', quantity: 1, unit: 'усл. ед', okpd: '' },
 ];
 
 const KIND = {
@@ -101,6 +102,14 @@ async function loadHealth() {
     const health = await api('/api/health');
     const parts = [`v${health.version}`, health.mode === 'replay' ? 'воспроизведение снимков' : 'живые источники'];
     $('health').textContent = parts.join(' · ');
+    if (health.mode === 'replay') {
+      const day = health.snapshotDate ? new Date(health.snapshotDate).toLocaleDateString('ru-RU') : '';
+      $('demo-note').hidden = false;
+      $('demo-note').innerHTML =
+        '<b>Демо-режим.</b> Сервис работает по сохраненным ответам реальных источников' + (day ? ' (записаны ' + day + ')' : '') +
+        ' для примеров над полем описания. Расчет идет по тем же правилам. Для своей закупки добавьте коммерческие предложения вручную. ' +
+        'Полная версия с поиском в реальном времени запускается из репозитория.';
+    }
   } catch {
     /* бейдж остаётся по умолчанию */
   }

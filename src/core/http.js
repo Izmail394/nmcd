@@ -6,6 +6,7 @@
  * сбои выглядят одинаково и расчёт можно воспроизвести по сохранённым снимкам.
  */
 import { createHash } from 'node:crypto';
+import { gunzipSync, gzipSync } from 'node:zlib';
 import fs from 'node:fs';
 import path from 'node:path';
 import tls from 'node:tls';
@@ -259,19 +260,41 @@ export function withSnapshots(inner, dir, mode) {
     return { file: path.join(dir, host, `${key}.json`), bodyText };
   }
 
+  const readSnapshot = (file) => {
+    if (fs.existsSync(`${file}.gz`)) return JSON.parse(gunzipSync(fs.readFileSync(`${file}.gz`)).toString('utf8'));
+    if (fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, 'utf8'));
+    return null;
+  };
+  const writeSnapshot = (file, snapshot) => {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(`${file}.gz`, gzipSync(JSON.stringify(snapshot), { level: 9 }));
+  };
+
   async function handle(method, url, body, options) {
     const { file, bodyText } = fileFor(method, url, body);
     if (mode === 'replay') {
-      if (!fs.existsSync(file)) {
-        throw new SourceError('no_snapshot', 'Режим воспроизведения: для этого запроса нет сохранённого ответа', { url });
+      const snapshot = readSnapshot(file);
+      if (!snapshot) {
+        throw new SourceError(
+          'no_snapshot',
+          'Демо-режим: для этого запроса нет сохранённого ответа источника. Воспользуйтесь примерами или добавьте предложения вручную.',
+          { url },
+        );
       }
-      const snapshot = JSON.parse(fs.readFileSync(file, 'utf8'));
+      // Недоступность источника при записи воспроизводится так же, как была: блокировка остаётся блокировкой.
+      if (snapshot.error) throw new SourceError(snapshot.error.kind, snapshot.error.message, { url, status: snapshot.error.status });
       return snapshot.response;
     }
-    const response = method === 'GET' ? await inner.get(url, options) : await inner.post(url, body ?? {}, options);
-    const snapshot = { method, requestUrl: url, requestBody: bodyText, response };
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, JSON.stringify(snapshot), 'utf8');
+    let response;
+    try {
+      response = method === 'GET' ? await inner.get(url, options) : await inner.post(url, body ?? {}, options);
+    } catch (error) {
+      if (error instanceof SourceError && error.kind !== 'timeout') {
+        writeSnapshot(file, { method, requestUrl: url, requestBody: bodyText, error: { kind: error.kind, message: error.message, status: error.status } });
+      }
+      throw error;
+    }
+    writeSnapshot(file, { method, requestUrl: url, requestBody: bodyText, response });
     return response;
   }
 

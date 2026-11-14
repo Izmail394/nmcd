@@ -6,6 +6,7 @@
  *   DATA_DIR              — каталог отчётов и снимков (по умолчанию ./data);
  *   CONFIG_DIR            — каталог sources.json, rules.json, cpi.json (по умолчанию ./config);
  *   SNAPSHOT_MODE         — off | record | replay: запись и воспроизведение ответов источников;
+ *   SNAPSHOT_DIR          — каталог снимков (по умолчанию DATA_DIR/snapshots);
  *   EXTRA_CA_HOSTS        — суффиксы хостов для сертификатов из ./certs (по умолчанию .gov.ru).
  */
 import fs from 'node:fs';
@@ -44,7 +45,15 @@ const extraCaPem = loadExtraCa(path.join(root, 'certs'));
 const extraCaHosts = env.EXTRA_CA_HOSTS?.split(',')
   .map((host) => host.trim())
   .filter(Boolean);
-const http = withSnapshots(createHttpClient({ extraCaPem, ...(extraCaHosts?.length ? { extraCaHosts } : {}) }), path.join(dataDir, 'snapshots'), mode);
+const snapshotDir = path.resolve(env.SNAPSHOT_DIR || path.join(dataDir, 'snapshots'));
+const metaFile = path.join(snapshotDir, '_meta.json');
+if (mode === 'record') {
+  fs.mkdirSync(snapshotDir, { recursive: true });
+  fs.writeFileSync(metaFile, JSON.stringify({ recordedAt: new Date().toISOString() }, null, 2));
+}
+// В режиме воспроизведения «сегодня» равно дню записи: давность цен и индексация считаются так же, как при записи.
+const recordedAt = mode === 'replay' && fs.existsSync(metaFile) ? readJson(metaFile, {}).recordedAt : undefined;
+const http = withSnapshots(createHttpClient({ extraCaPem, ...(extraCaHosts?.length ? { extraCaHosts } : {}) }), snapshotDir, mode);
 
 const app = await buildApp({
   registry,
@@ -53,6 +62,8 @@ const app = await buildApp({
   cpi,
   store: new ReportStore(path.join(dataDir, 'reports')),
   mode: mode === 'replay' ? 'replay' : 'live',
+  snapshotDate: recordedAt,
+  now: recordedAt ? () => new Date(recordedAt) : undefined,
   appVersion: packageInfo.version ?? '0.0.0',
   publicDir: path.join(root, 'public'),
 });
