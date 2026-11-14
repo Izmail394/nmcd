@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ценовой ориентир — обоснование НМЦД</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="brand">◈ <span>ЦЕНОВОЙ ОРИЕНТИР</span></div>
+  <span class="badge" id="health">Прототип · Хакатон</span>
+</header>
+<main>
+  <section class="intro">
+    <div>
+      <p class="eyebrow">ОБОСНОВАНИЕ НМЦД</p>
+      <h1>Цена, которую<br><em>можно обосновать.</em></h1>
+      <p>Опишите закупку — сервис найдёт сопоставимые предложения в открытых источниках, приведёт цены к одной единице, уберёт аномальные и покажет расчёт, который можно повторить вручную.</p>
+    </div>
+    <div class="steps">
+      <div><b>01</b> Описание закупки</div>
+      <div><b>02</b> Поиск и сопоставление</div>
+      <div><b>03</b> Обоснование цены</div>
+    </div>
+  </section>
+
+  <form id="form">
+    <section class="card">
+      <div class="sectionhead">
+        <div><span class="eyebrow">ШАГ 01</span><h2>Предмет закупки</h2></div>
+        <span class="hint">Передавайте только открытые данные</span>
+      </div>
+      <div class="examples" id="examples"><span class="muted">Примеры:</span></div>
+      <label for="description">Описание закупки</label>
+      <textarea id="description" required minlength="3" maxlength="5000" placeholder="Например: Бумага офисная А4, плотность 80 г/м2, пачка 500 листов"></textarea>
+      <div class="grid">
+        <label>Количество<input id="quantity" type="number" min="0.001" step="any" value="100" required></label>
+        <label>Единица измерения<input id="unit" value="упак" required maxlength="30"></label>
+        <label>Код ОКПД2 <small>необязательно</small><input id="okpd" placeholder="17.12.14.110" maxlength="20"></label>
+        <label>Регион <small>необязательно</small><input id="region" placeholder="Москва" maxlength="100"></label>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="sectionhead">
+        <div><span class="eyebrow">ШАГ 02</span><h2>Источники и предложения</h2></div>
+      </div>
+      <p>Поиск идёт по отмеченным источникам. Если источник недоступен или блокирует автоматические запросы, это будет показано в отчёте, а расчёт продолжится по остальным.</p>
+      <div id="sources" class="sources">Загрузка источников…</div>
+      <h3>Коммерческие предложения вручную</h3>
+      <p>Добавьте цены из полученных КП или с площадок, которых нет в списке. Они участвуют в расчёте наравне с найденными.</p>
+      <div id="offers"></div>
+      <button type="button" id="add" class="secondary">＋ Добавить предложение</button>
+    </section>
+
+    <button class="primary" id="submit">Рассчитать обоснование →</button>
+    <p id="status" role="status" aria-live="polite"></p>
+  </form>
+
+  <section id="result" hidden>
+    <div class="result-heading">
+      <div><span class="eyebrow">РЕЗУЛЬТАТ РАСЧЁТА</span><h2 id="result-title">Обоснование цены</h2></div>
+      <div class="actions">
+        <a id="docx" class="secondary" href="#">Скачать DOCX</a>
+        <button type="button" id="download" class="secondary">Скачать JSON</button>
+        <button type="button" id="print" class="secondary">Печать / PDF</button>
+      </div>
+    </div>
+    <div id="summary"></div>
+    <div class="card"><h3>Разбор описания закупки</h3><div id="requirement"></div></div>
+    <div class="card"><h3>Источники</h3><div id="runs"></div></div>
+    <div class="card">
+      <div class="sectionhead">
+        <h3>Предложения и решения</h3>
+        <div class="filters" id="filters"></div>
+      </div>
+      <p class="muted">Любое решение можно изменить вручную — расчёт повторится по тем же правилам, правка попадёт в отчёт.</p>
+      <div id="decisions"></div>
+    </div>
+    <div class="card"><h3>Исключение аномальных цен</h3><div id="outliers"></div></div>
+    <div class="card"><h3>Путь расчёта</h3><div id="trace"></div></div>
+    <p class="disclaimer">Прототип не заменяет проверку специалиста по закупкам. Проверьте источники, условия поставки, НДС и применимость метода перед использованием.</p>
+  </section>
+
+  <section class="card" id="history-card" hidden>
+    <h3>Последние расчёты</h3>
+    <div id="history"></div>
+  </section>
+</main>
+<footer>Ценовой ориентир · Открытые данные · Воспроизводимый расчёт</footer>
+<script src="/app.js"></script>
+</body>
+</html>

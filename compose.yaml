@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:24-alpine}
+    image: nmcd:latest
+    ports:
+      - "${BIND:-127.0.0.1}:${PORT:-3000}:3000"
+    environment:
+      SNAPSHOT_MODE: ${SNAPSHOT_MODE:-off}
+      EXTRA_CA_HOSTS: ${EXTRA_CA_HOSTS:-.gov.ru}
+    volumes:
+      - nmcd-data:/app/data
+      # Источники, правила и ИПЦ можно менять без пересборки образа:
+      - ./config:/app/config:ro
+      - ./certs:/app/certs:ro
+    restart: unless-stopped
+
+volumes:
+  nmcd-data:

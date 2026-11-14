@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet" />
+    <title>(N) Комус</title>
+    <style>*{box-sizing:border-box;margin:0;padding:0}:root{--ff:'Montserrat',Arial,Helvetica,sans-serif;--bg:#fff;--fg:#000;--muted:#6d778b;--s8:8px;--s16:16px;--s24:24px;--s40:40px;--link:#0b5fff}html{font-size:16px;-webkit-text-size-adjust:100%}body{font-family:var(--ff);background:var(--bg);color:var(--fg);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(12px,4vw,var(--s24));line-height:1.6;font-weight:400;font-size:16px}.section{display:flex;flex-direction:column;gap:var(--s8);min-width:0;width:100%}.main{width:100%;min-width:0;margin:0 auto;text-align:center;padding-inline:clamp(10px,3.5vw,20px)}.site-brand{display:flex;flex-direction:column;align-items:center;margin-bottom:var(--s16)}.site-brand__logo{display:block;width:min(152px,88vw);height:auto}.title,.lockdown__title{font-family:var(--ff);font-size:1.125rem;font-weight:500;line-height:1.4;color:var(--fg);margin:0 auto;word-break:break-word}.lockdown__title{margin-top:var(--s8)}#error-default{gap:clamp(18px,4vw,28px);color:var(--fg)}#error-lockdown{gap:clamp(14px,3vw,20px)}#error-default .error-illu{margin:0;border:0}#error-default .error-illu img{display:block;margin:0 auto;width:min(146px,58vw);height:auto}.subtitle,.lockdown__text,#error-default .forbidden__description,#error-default .forbidden__feedback{font-family:var(--ff);font-size:1rem;font-weight:400;color:var(--muted);line-height:1.6;margin-left:auto;margin-right:auto;overflow-wrap:anywhere;padding-inline:2px}.lockdown__text a{color:inherit;text-decoration:underline}#error-default .forbidden__socials{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:4px}#error-default .forbidden__contact{display:inline-flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-family:var(--ff);font-size:1rem;font-weight:500;color:var(--link);text-decoration:none}#error-default .forbidden__contact:hover{text-decoration:underline}#error-default .forbidden__icon{flex-shrink:0;width:22px;height:22px}#error-default .forbidden__help{font-family:var(--ff);font-size:1rem;font-weight:500;line-height:1.5;color:var(--fg);margin:0 auto;overflow-wrap:anywhere}#error-default .forbidden__meta{display:flex;flex-direction:column;gap:6px}#error-default .forbidden__request{font-family:var(--ff);font-size:.875rem;font-weight:400;line-height:1.6;color:var(--muted);margin:0;overflow-wrap:anywhere}#error-default #report{margin:4px auto 0;align-self:center;font:inherit;font-family:var(--ff);font-size:.875rem;font-weight:500;color:var(--link);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}#error-default #report:hover{color:#0946c9}.noscript-panel{margin-top:clamp(48px,12vh,132px)}#default-challenge-container,#interactive-challenge-container{width:100%;min-width:0}@media (max-width:480px){html{font-size:13px}body{padding:var(--s16);justify-content:flex-start;padding-top:clamp(24px,8vh,var(--s40));font-size:14px}.site-brand{margin-bottom:var(--s8)}.title,.lockdown__title{font-size:1rem;font-weight:500;line-height:1.35}.subtitle,.lockdown__text,#error-default .forbidden__description,#error-default .forbidden__feedback{font-size:.8125rem;line-height:1.55}#error-default .forbidden__contact{font-size:.8125rem}#error-default .forbidden__help{font-size:.8125rem}#error-default .forbidden__request,#error-default #report{font-size:.75rem}}@media (min-width:768px){.main{padding-inline:clamp(16px,4vw,32px)}}</style>
+  </head>
+  <body>
+    <div class="main">
+      <header class="site-brand">
+        <img
+          class="site-brand__logo"
+          src="https://www.komus.ru/errorpage/header__logo_ai.svg"
+          width="152"
+          height="48"
+          alt="Комус"
+        />
+      </header>
+
+      <section
+        class="section"
+        id="default-challenge-section"
+        style="display: none"
+      >
+        <h1 class="title">
+          Сейчас будет выполнена проверка вашего веб-браузера.
+        </h1>
+        <p class="subtitle">Пожалуйста, дождитесь загрузки страницы.</p>
+        <div id="default-challenge-container"></div>
+      </section>
+
+      <section
+        class="section"
+        id="interactive-challenge-section"
+        style="display: none"
+      >
+        <h1 class="title">
+          Запросы с вашего IP-адреса похожи на автоматические
+        </h1>
+        <div id="interactive-challenge-container"></div>
+      </section>
+
+      <section class="section" id="error-section" style="display: none">
+        <div id="error-default" class="section" style="display: none">
+          <figure class="error-illu">
+            <img
+              src="https://www.komus.ru/errorpage/forbidden__logo.svg"
+              width="146"
+              height="146"
+              alt=""
+            />
+          </figure>
+
+          <h1 class="title">
+            Мы ограничили ваши действия на сайте, так как они похожи на<br>
+            активность робота
+          </h1>
+
+          <p class="forbidden__description">
+            Пожалуйста, проверьте актуальность вашей версии браузера и при<br>
+            необходимости попробуйте обновить его до последней версии. В случае<br>
+            повторения проблемы проверьте и отключите расширения, ограничивающие<br>
+            работу Javascript.
+          </p>
+
+          <p class="forbidden__feedback">
+            Если ограничение произошло ошибочно, напишите нам.
+          </p>
+
+          <div class="forbidden__socials">
+            <a
+              class="forbidden__contact forbidden__contact--tg"
+              href="http://t.me/techkomus_bot"
+            >
+              <svg
+                class="forbidden__icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="12" fill="#2AABEE" />
+                <path
+                  fill="#fff"
+                  d="M5.4 11.8 18 7.2c.6-.2 1.1.2.9.9l-2 9.4c-.2.7-.6.9-1.1.6l-3.2-2.4-1.5 1.5c-.2.2-.3.3-.6.3l.2-3.1 5.9-5.3c.1-.1 0-.2-.1-.1l-7.4 4.7-3.2-1c-.6-.2-.6-.7.1-1z"
+                />
+              </svg>
+              <span>Телеграм</span>
+            </a>
+            <a
+              class="forbidden__contact email"
+              href="mailto:help.online@komus.net"
+              ><svg
+                class="forbidden__icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  d="M3 6.5h18v11H3zM3 6.5L12 13l9-6.5"
+                />
+              </svg>
+              <span>help.online@komus.net</span>
+            </a>
+          </div>
+
+          <p class="forbidden__help">
+            Приложите информацию ниже, а также ИНН компании или код клиента,<br>
+            если вы представитель юридического лица.
+          </p>
+
+          <div class="forbidden__meta">
+            <p class="forbidden__request">
+              Timestamp:
+              <span id="time">2026-11-13T17:03:12.325Z (N)</span>
+            </p>
+            <p class="forbidden__request">
+              IP:
+              <span id="ip_address">194.85.207.3</span>
+            </p>
+            <p class="forbidden__request">
+              Request ID:
+              <span id="request_id">e7471e352460f0c9a040cbb47fa5e27b</span>
+            </p>
+          </div>
+
+          <button id="report" type="button">Скачать отчёт</button>
+        </div>
+
+        <div id="error-lockdown" class="section" style="display: none">
+          <p class="lockdown__title">Проверка не может быть выполнена</p>
+          <p class="lockdown__text">
+            На устройстве Apple включён
+            <a href="https://support.apple.com/ru-ru/105120">режим блокировки</a>, 
+            из‑за ограничений на выполнение проверки. Отключите режим<br>
+            блокировки или добавьте исключение для браузера в настройках<br>
+            устройства, затем обновите страницу.
+          </p>
+        </div>
+      </section>
+
+      <noscript>
+        <section class="section noscript-panel">
+          <h2 class="title">Отключена поддержка JavaScript.</h2>
+          <p class="subtitle">
+            Для доступа к веб-ресурсу включите в настройках вашего веб-браузера<br>
+            поддержку JavaScript или воспользуйтесь другим веб-браузером,<br>
+            который поддерживает JavaScript.
+          </p>
+        </section>
+      </noscript>
+    </div>
+    <script>window.ctx='min_display=1500&report_mode=2&challenge_url=%2Fngenix-aGVsbG8sIGh1bWFu%2Fbot-challenge%2Fchallenge&request_id=e7471e352460f0c9a040cbb47fa5e27b&request_ip=194.85.207.3&state_header=x-ngenix-bcd&challenge_modules_location=%2Fngenix-aGVsbG8sIGh1bWFu%2Fbot-challenge%2Fmodules%2F&error_report_endpoint=%2Fngenix-aGVsbG8sIGh1bWFu%2Fbot-challenge%2Freport&settings_header=x-ngenix-bcc&settings=2.db63b960ac7168ef46bb7938e308b1e938de0310d6f8546f4b839e763ea8fa4e.MQ%3D%3D.n0U9wnRbbsCtzHjw6gPR4R50QCEeMrBB53WuAiLsrnxg%2BFw0dBmnxlTUe1Iau7Z6Y8Y0eQlSce2t0sF97COk6aJc9ANhsSMOZ1qciX49Cs6r9G4HsQOIe1xvW9En7GYqGTFl5Gftx10DqM2c8Y9wcGqQGbAHzLmGOYqdwUiHE6zOdc5ncGbwmLB8gT26qqI90fC51zVTPMRTp9vyZWE5ddQysp%2BkZGETE7eLosuX%2BxVc7oEsoXl4P1%2B7TbB6zWaE0doLLnLafLbcWc5TdmFDgqk1LXbHG5yrL45n3xIuKkHEb5urlSm2sSulDBoi9sOBQf2%2B%2BM8OFq%2FKfmAx0uDAWba8jB9VN%2Fww7rj%2F%2FPnQ2cpocACKQDGOXCbGvv4SqWefKxt%2FcMX7ocRvOXas2iF2g2vY0tYkapsjIVzO0hanQoF2XyA3PkxKh9x2nd9IEi2aqOMSXVZ3E8hLUEuyt9PKGTb1Tiq5FqGuDEdo1cdZulI2pDaqy%2Bmg6nsZACY%3D';</script><script src='/ngenix-aGVsbG8sIGh1bWFu/bot-challenge/loader.js?c=2a973de40ff56572b421123e7a4eadb5eaf946ed7dd2bf16ac2d22fbfcedf1d7'></script>
+  </body>
+</html>

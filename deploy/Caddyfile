@@ -1,0 +1,10 @@
+# Обратный прокси с автоматическим сертификатом HTTPS. Домен берется из переменной DOMAIN.
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy app:3000 {
+		# Расчет по источникам может идти до минуты
+		transport http {
+			response_header_timeout 120s
+		}
+	}
+}

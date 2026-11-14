@@ -1,0 +1,43 @@
+{
+  "_comment": "Правила сопоставления и расчёта. Любой параметр можно изменить без правки кода; полный список и значения по умолчанию — src/core/rules.ts. Снимок действующих правил сохраняется в каждом отчёте.",
+  "collect": {
+    "perSourceLimit": 15,
+    "perSourceTimeoutMs": 45000
+  },
+  "relevance": {
+    "minScore": 0.5,
+    "numericTolerancePercent": 5,
+    "minKeywordCoverage": 0.5,
+    "minConfirmedMustShare": 0.75
+  },
+  "freshness": {
+    "maxAgeMonths": 36,
+    "indexAfterMonths": 6
+  },
+  "vat": {
+    "ratePercent": 22
+  },
+  "outliers": {
+    "minPrices": 3,
+    "cvThresholdPercent": 33,
+    "iqrFactor": 1.5,
+    "minForIqr": 5,
+    "medianRatioLow": 0.5,
+    "medianRatioHigh": 2,
+    "minDeviationPercent": 20
+  },
+  "normalize": {
+    "maxPackScaleUp": 2
+  },
+  "priority": {
+    "preferPrimary": 1
+  },
+  "synonyms": {
+    "_comment": "Дополняет встроенные синонимы названий характеристик (src/core/rules.ts): каноническое имя -> названия в источниках",
+    "плотность": [
+      "масса бумаги площадью 1м2",
+      "масса бумаги площадью 1 м2",
+      "масса 1 м2"
+    ]
+  }
+}

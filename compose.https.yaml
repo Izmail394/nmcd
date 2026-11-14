@@ -1,0 +1,22 @@
+# Дополнение к compose.yaml для публикации по HTTPS на своем домене.
+#   DOMAIN=nmcd.example.ru docker compose -f compose.yaml -f compose.https.yaml up -d --build
+# Домен должен указывать записью A на адрес сервера, порты 80 и 443 должны быть открыты.
+services:
+  app:
+    ports: !override []
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?Укажите DOMAIN, например nmcd.example.ru}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - app
+
+volumes:
+  caddy-data:
