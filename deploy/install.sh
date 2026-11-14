@@ -25,6 +25,17 @@ if ! docker compose version >/dev/null 2>&1; then
 fi
 systemctl enable --now docker
 
+# На дешевых серверах с малым объемом памяти сборка образа может завершиться из-за нехватки памяти.
+# Если памяти меньше 1,9 ГБ и подкачки нет, создается файл подкачки на 2 ГБ.
+if [ "$(awk '/MemTotal/ {print $2}' /proc/meminfo)" -lt 1900000 ] && [ "$(swapon --show | wc -l)" -eq 0 ]; then
+  echo "Мало памяти, создаю файл подкачки 2 ГБ"
+  fallocate -l 2G /swapfile 2>/dev/null || dd if=/dev/zero of=/swapfile bs=1M count=2048 status=none
+  chmod 600 /swapfile
+  mkswap /swapfile >/dev/null
+  swapon /swapfile
+  grep -q '^/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
+fi
+
 compose() {
   if docker compose version >/dev/null 2>&1; then docker compose "$@"; else docker-compose "$@"; fi
 }
